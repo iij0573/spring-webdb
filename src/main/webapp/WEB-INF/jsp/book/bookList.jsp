@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<body class="is-preload">
+<body class="is-preload ">
 	<div id="main">
 		<div class="wrapper">
 			<div class="inner">
