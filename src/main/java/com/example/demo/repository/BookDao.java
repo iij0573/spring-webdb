@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.repository;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.domain.Book;
 import com.example.demo.pageMaker.Criteria;
 
 @Repository
@@ -22,7 +23,7 @@ public class BookDao implements BookRepository{
 	
 	@Override
 	public Book borrow() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -83,8 +84,6 @@ public class BookDao implements BookRepository{
 
 	@Override
 	public List<Book> getListWithPaging(Criteria cri) {
-		int start = cri.getPageNum() * cri.getAmount();
-		int end = (cri.getPageNum()-1) * (cri.getAmount());
 		
 		return jdbcTemplate.query ("select * from (select rownum rn, book.* from book) "
 				+ "where rn between ? and ?", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
