@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="/resources/assets/css/main.css" />
 <body class="is-preload ">
 	<div id="main">
 		<div class="wrapper">
@@ -27,8 +28,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<form id="actionForm" action="/book/list" method="get">
-									<c:forEach var="book" items="${books}">
+									<c:forEach var="book" items="${list}">
 										<tr>
 											<td>${book.bookNum}</td>
 											<td><a class="goGet" href="${book.bookNum}">${book.title}</a></td>
@@ -38,9 +38,36 @@
 											<td class="rental">${book.rental}</td>
 										</tr>
 									</c:forEach>
-								</form>
+						
 							</tbody>
 						</table>
+						</div>
+					<div class="big-width" style="text-align: center">
+					<c:if test="${pageMaker.prev}">
+						<a class="changePage" href="${pageMaker.startPage - 1}"><code>&lt;</code></a>
+					</c:if>
+					<c:forEach var="num" begin="${pageMaker.startPage}"
+						end="${pageMaker.endPage}">
+						<c:choose>
+							<c:when test="${pageMaker.cri.pageNum eq num}">
+								<code>${num}</code>
+							</c:when>
+							<c:otherwise>
+								<a class="changePage" href="${num}"><code>${num}</code></a>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+					<c:if test="${pageMaker.next}">
+						<a class="changePage" href="${pageMaker.endPage + 1}"><code>&gt;</code></a>
+					</c:if>
+					
+					<form id="actionForm" action="/book/list" method="get">
+						<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+						<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+						<input type="hidden" name="type" value="${pageMaker.cri.type}">
+						<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
+					</form>
+						
 					</div>
 				</div>
 			</div>
@@ -49,19 +76,27 @@
 
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<!--js-->
 	<script>
-		var actionForm = $("#actionForm");
-
+	var actionForm = $("#actionForm");
+	
+	$(document).ready(function(){
 		$(".goGet")
 				.on("click", function(e) {
 							e.preventDefault();
-							actionForm
-									.append("<input type='hidden' name='bookNum' value='"
+							actionForm.append("<input type='hidden' name='bookNum' value='"
 											+ $(this).attr("href") + "'>");
 							actionForm.attr("action", "/book/get");
 							actionForm.submit();
-						})
+						});
+	});
+	
+	$(".changePage").on("click", function(e) {
+		//a 태그의 동작을 막고 원하는 url에 페이지 번호를 넘겨주어야 한다.
+		e.preventDefault();
+		actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+		actionForm.submit();
+	})
+	
 	</script>
 </body>
 </html>

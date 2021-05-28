@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import javax.sql.DataSource;
@@ -9,20 +10,55 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.pageMaker.Criteria;
+
 @Repository
-public class BookDao {
+public class BookDao implements BookRepository{
 	private JdbcTemplate jdbcTemplate;
 
-	public BookDao(DataSource dataSource) {
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	public BookDao(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+	
+	@Override
+	public Book borrow() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
+
+	@Override
+	public void search() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void bookReturn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void bookAdd() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
 	public List<Book> bookList() {
-		return jdbcTemplate.query("select * from book", bookRowMapper());
+		List<Book> book = jdbcTemplate.query("select * from book", bookRowMapper());
+		return book;
 	}
 
+
+	@Override
 	public List<Book> read(int bookNum) {
-		return jdbcTemplate.query("select * from book where bookNum = ?", bookRowMapper(), bookNum);	 
+		List<Book> book = jdbcTemplate.query("select * from book where bookNum = ?", bookRowMapper(), bookNum);
+		return book;
 	}
 
 	private RowMapper<Book> bookRowMapper() {
@@ -37,5 +73,23 @@ public class BookDao {
 			return book;
 		};
 	}
+
+	@Override
+	public int getTotal(Criteria cri) {
+		String sql = "SELECT COUNT(*) FROM BOOK WHERE BOOKNUM > 0";
+		int count = jdbcTemplate.queryForObject(sql, Integer.class);
+		return count;
+	}
+
+	@Override
+	public List<Book> getListWithPaging(Criteria cri) {
+		int start = cri.getPageNum() * cri.getAmount();
+		int end = (cri.getPageNum()-1) * (cri.getAmount());
+		
+		return jdbcTemplate.query ("select * from (select rownum rn, book.* from book) "
+				+ "where rn between ? and ?", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
+				
+	}
+	
 
 }
