@@ -24,6 +24,7 @@
 				</h3>
 				<div class="content">
 					<div class="form">
+					<form method="post" action="/book/borrow" id="actionForm">
 						<div class="fields">
 							<div class="field">
 								<h4>번호</h4>
@@ -54,17 +55,19 @@
 							</div>
 							<ul class="actions special">
 								<li>
-									<input type="button" class="button" value="대여"/>
-									<input type="submit" class="button" value="반납" />
+									<input class="remove" type="submit" class="button" value="대여" />
 								</li>
 							</ul>
-					
 						</div>
+					</form>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<script>
+	
+	</script>
 
 </body>
 </html>

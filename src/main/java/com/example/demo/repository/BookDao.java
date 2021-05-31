@@ -1,11 +1,6 @@
 package com.example.demo.repository;
 
 import java.util.List;
-
-import java.util.Optional;
-
-import javax.sql.DataSource;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -22,31 +17,11 @@ public class BookDao implements BookRepository{
 	}
 	
 	@Override
-	public Book borrow() {
-		
-		return null;
-	}
-
-
-	@Override
 	public void search() {
 		// TODO Auto-generated method stub
 		
 	}
 
-
-	@Override
-	public void bookReturn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void bookAdd() {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 	@Override
@@ -70,7 +45,7 @@ public class BookDao implements BookRepository{
 			book.setAuthor(rs.getString("author"));
 			book.setGrade(rs.getFloat("grade"));
 			book.setStock(rs.getInt("stock"));
-			book.setRental(rs.getBoolean("rental"));
+			book.setRental(rs.getString("rental"));
 			return book;
 		};
 	}
@@ -89,6 +64,20 @@ public class BookDao implements BookRepository{
 				+ "where rn between ? and ?", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
 				
 	}
-	
+
+	@Override
+	public int borrow(Book book ) {
+		String sql = "update book set stock= ? and rental = ? where booknum = ?";
+		book.setRental("대여갸능");
+		int count = jdbcTemplate.update(sql, new Object[] {book.getStock() - 1, book.getRental(), book.getBookNum()});
+		System.out.println(book.getRental());
+		return count;
+	}
+
+	@Override
+	public void bookReturn() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.domain.Book;
 import com.example.demo.pageMaker.Criteria;
 import com.example.demo.pageMaker.PageDTO;
 import com.example.demo.service.BookService;
@@ -29,13 +31,30 @@ public class BookContoller {
     	return "book/bookList";
     }
 
-    @PostMapping(value = "/borrow")
-    public void borrow(){
-
+    @GetMapping("/borrow")
+    public String borrow (Model model, Book book, RedirectAttributes rttr, @RequestParam("bookNum") int bookNum) {
+    	if(service.borrow(book)) {
+    		rttr.addFlashAttribute("result", "success");
+    		model.addAttribute("book", service.findBookNum(bookNum));
+    	}
+    	return "member/myPage";
     }
     
-    @GetMapping("/get")
-    public void get(@RequestParam("bookNum") int bookNum, Model model) {
+    @PostMapping("/borrow")
+    public String myPage(Book book, @RequestParam("bookNum") int bookNum, Model model, RedirectAttributes rttr) {
+    	if(service.borrow(book)) {
+    		rttr.addFlashAttribute("result", "success");
+    		model.addAttribute("book", service.findBookNum(bookNum));
+    		if(book.getStock() == 0) {
+    			rttr.addFlashAttribute("result", "fail");
+    		}
+    	}
+    	return "redirect:/book/list";
+    }
+    
+    @GetMapping({"/get"})
+    public void get(@RequestParam("bookNum") int bookNum , Model model) {
+    		
     	model.addAttribute("book", service.findBookNum(bookNum));
     }
 }

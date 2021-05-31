@@ -9,5 +9,5 @@ public class Book {
     private String author;
     private float grade;
     private int stock;
-    private Boolean rental;
+    private String rental;
 }
