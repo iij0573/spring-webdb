@@ -40,12 +40,14 @@ public class BookDao implements BookRepository{
 	private RowMapper<Book> bookRowMapper() {
 		return (rs, rowNum) -> {
 			Book book = new Book();
-			book.setBookNum(rs.getInt("bookNum"));
-			book.setTitle(rs.getString("title"));
-			book.setAuthor(rs.getString("author"));
-			book.setGrade(rs.getFloat("grade"));
-			book.setStock(rs.getInt("stock"));
-			book.setRental(rs.getString("rental"));
+			if(rowNum != 0){
+				book.setBookNum(rs.getInt("bookNum"));
+				book.setTitle(rs.getString("title"));
+				book.setAuthor(rs.getString("author"));
+				book.setGrade(rs.getFloat("grade"));
+				book.setStock(rs.getInt("stock"));
+				book.setRental(rs.getString("rental"));
+			}
 			return book;
 		};
 	}
@@ -60,8 +62,16 @@ public class BookDao implements BookRepository{
 	@Override
 	public List<Book> getListWithPaging(Criteria cri) {
 		
-		return jdbcTemplate.query ("select * from (select rownum rn, book.* from book) "
-				+ "where rn between ? and ?", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
+		return jdbcTemplate.query ("" +
+				"SELECT * FROM (SELECT \n" +
+				"       TITLE,\n" +
+				"       AUTHOR,\n" +
+				"       GRADE,\n" +
+				"       STOCK,\n" +
+				"       RENTAL,\n" +
+				"       ROW_NUMBER() OVER () AS ROWNO\n" +
+				"FROM BOOK) A\n" +
+				"WHERE A.ROWNO BETWEEN ? AND ?", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
 				
 	}
 
