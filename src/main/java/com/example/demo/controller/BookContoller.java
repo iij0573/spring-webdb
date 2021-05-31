@@ -33,10 +33,8 @@ public class BookContoller {
 
     @GetMapping("/borrow")
     public String borrow (Model model, Book book, RedirectAttributes rttr, @RequestParam("bookNum") int bookNum) {
-    	if(service.borrow(book)) {
-    		rttr.addFlashAttribute("result", "success");
-    		model.addAttribute("book", service.findBookNum(bookNum));
-    	}
+   
+    /*	model.addAttribute("book", service.findBookNum(bookNum));*/
     	return "member/myPage";
     }
     

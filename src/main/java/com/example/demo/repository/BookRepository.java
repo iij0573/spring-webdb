@@ -7,8 +7,6 @@ import com.example.demo.pageMaker.Criteria;
 
 public interface BookRepository {
 
-	void search();
-
 	void bookReturn();
 
 	List<Book> read(int bookNum);

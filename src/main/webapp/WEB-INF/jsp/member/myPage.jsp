@@ -29,15 +29,14 @@
 							<tbody>
 								<c:forEach var="book" items="${book}">
 									<tr>
-										<td>${book.bookNum}</td>
-										<td><a class="goGet" href="${book.bookNum}">${book.title}</a></td>
-										<td class="author">${book.author}</td>
-										<td class="grade">${book.grade}</td>
-										<td class="stock">${book.stock}</td>
-										<td class="rental">${book.rental}</td>
+										<td>${book[0].bookNum}</td>
+										<td><a class="goGet" href="${book.bookNum}">${book[0].title}</a></td>
+										<td class="author">${book[0].author}</td>
+										<td class="grade">${book[0].grade}</td>
+										<td class="stock">${book[0].stock}</td>
+										<td class="rental">${book[0].rental}</td>
 									</tr>
 								</c:forEach>
-
 							</tbody>
 						</table>
 					</div>

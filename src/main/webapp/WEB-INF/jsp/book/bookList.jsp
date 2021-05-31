@@ -16,7 +16,7 @@
 						<p>도서 목록</p>
 					</header>
 					<h3>
-					<a href="/member/myPage" class="button small">마이페이지</a>
+					<a href="/book/borrow" class="button small">마이페이지</a>
 				</h3>
 					<div class="table-wrapper">
 						<table>
