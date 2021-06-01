@@ -21,7 +21,7 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> BookList(){
+    public List<Book> bookList(){
         return bookRepository.bookList();
     }
 
@@ -40,4 +40,9 @@ public class BookService {
     public boolean borrow(Book book) {
     	return bookRepository.borrow(book) == 1;
     }
+    
+    public boolean addInfo(String id, int bookNum) {
+   	 	return bookRepository.addInfo(id, bookNum) == 1;
+   }
+   
 }
