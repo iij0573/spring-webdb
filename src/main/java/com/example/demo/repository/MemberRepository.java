@@ -7,7 +7,7 @@ import com.example.demo.domain.Member;
 
 public interface MemberRepository {
 
-	public void singup(Member member);
+	public int singup(Member member);
 	
 	public List<Member> login(String id, String pw);
 	

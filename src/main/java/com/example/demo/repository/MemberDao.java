@@ -22,34 +22,33 @@ public class MemberDao implements MemberRepository{
 	private RowMapper<Member> MemberRowMapper() {
 		return (rs, rowNum) -> {
 			Member member = new Member();
-			member.setId(rs.getString("id"));
-			member.setName(rs.getString("name"));
-			member.setEmail(rs.getString("email"));
-			member.setPassword(rs.getString("password"));
-			member.setTel(rs.getString("tel"));
+			member.setId(rs.getString("ID"));
+			member.setName(rs.getString("NAME"));
+			member.setEmail(rs.getString("EMAIL"));
+			member.setPassword(rs.getString("PASSWORD"));
+			member.setTel(rs.getString("TEL"));
 			return member;
 		};
 	}
 
 	@Override
-	public void singup(Member member) {
-		String sql = "insert into member(id,name,email,password,tel) values (?,?,?,?,?)";
-		jdbcTemplate.update(sql, member.getId(), member.getName(), member.getEmail(), member.getPassword(), member.getTel());
-		
+	public int singup(Member member) {
+		String sql = "INSERT INTO member(ID, NAME, EMAIL, PASSWORD, TEL) VALUES(?,?,?,?,?)";
+		return jdbcTemplate.update(sql, member.getId(), member.getName(), member.getEmail(), member.getPassword(), member.getTel());
 	}
 
 	@Override
 	public List<Member> login(String id, String pw) {
-		String sql = "select * from member where id = ? and password = ?";
+		String sql = "SELECT * FROM member WHERE ID = ? AND PASSWORD = ?";
 		return jdbcTemplate.query(sql, new Object[] {id, pw}, MemberRowMapper());
 	}
 	
 	private RowMapper<MemberInfo> infoRowMapper(){
 		return (rs, rowNum) -> {
 			MemberInfo bookInfo = new MemberInfo();
-			bookInfo.setInfoNum(rs.getInt("infoNum"));
-			bookInfo.setId(rs.getString("id"));
-			bookInfo.setBookNum(rs.getInt("bookNum"));
+			bookInfo.setInfoNum(rs.getInt("INFONUM"));
+			bookInfo.setId(rs.getString("ID"));
+			bookInfo.setBookNum(rs.getInt("BOOKNUM"));
 			return bookInfo;
 		};
 	}
@@ -57,7 +56,7 @@ public class MemberDao implements MemberRepository{
 
 	@Override
 	public List<MemberInfo> getInfo(String id) {
-		String sql = "select * from bookInfo where id = ?";
+		String sql = "SELECT * FROM MEMBERINFO WHERE ID = ?";
 		return jdbcTemplate.query(sql, new Object[] {id}, infoRowMapper());
 	}
 

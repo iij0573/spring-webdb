@@ -15,7 +15,7 @@
 
 				<!-- Elements -->
 				<header class="major">
-					<h1 ><a href="/book/list">Book</a></h1>
+					<h1><a href="/book/list">Book</a></h1>
 					<p>도서 상세보기</p>
 				</header>
 				<!-- Table -->

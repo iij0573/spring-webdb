@@ -94,18 +94,10 @@ public class BookDao implements BookRepository{
 		return book;
 	}
 
-	private RowMapper<MemberInfo> infoRowMapper(){
-		return (rs, rowNum) -> {
-			MemberInfo bookInfo = new MemberInfo();
-			bookInfo.setId(rs.getString("id"));
-			bookInfo.setBookNum(rs.getInt("bookNum"));
-			return bookInfo;
-		};
-	}
 
 	@Override
 	public int addInfo(String id, int bookNum) {
-		String sql = "insert into bookinfo(id, bookNum) values(?, ?)";
+		String sql = "INSERT INTO MEMBERINFO(ID, BOOKNUM) VALUES(?, ?)";
 		int res = jdbcTemplate.update(sql, id , bookNum);
 		return res;
 	}

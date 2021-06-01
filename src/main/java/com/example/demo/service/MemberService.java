@@ -18,8 +18,8 @@ public class MemberService {
 		this.repository = repository;
 	}
 	
-	public void signup(Member member) {
-		repository.singup(member);
+	public boolean signup(Member member) {
+		 return repository.singup(member) == 1;
 	}
 	
 	public List<Member> login(String id, String pw) {

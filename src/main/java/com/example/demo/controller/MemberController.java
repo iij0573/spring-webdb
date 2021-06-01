@@ -32,13 +32,14 @@ public class MemberController {
 		this.bookService = bookService;
 	}
 	@GetMapping("/signup")
-	public String signup(Model model, Member member) {
-		service.signup(member);
-		return "member/signup";
+	public void signup(Model model, Member member) {
 	}
 	
 	@PostMapping("/signup")
 	public String signup2(Model model, Member member , HttpSession session) {
+		if(service.signup(member)) {
+			System.out.println("회원가입 성공");
+		}
 		return "member/login";
 	}
 	@GetMapping("/login")

@@ -14,14 +14,14 @@
 						<div class="collapse navbar-collapse" id="ftco-nav">
 
 							<ul class="navbar-nav ml-auto">
-								<c:if test="${empty member }">
+								<c:if test="${empty sessionId }">
 									<li class="nav-item"><a href="/member/signup"
 										class="nav-link">회원가입</a></li>
 									<li class="nav-item"><a href="/member/login"
 										class="nav-link">로그인</a></li>
 								</c:if>
-								<c:if test="${!empty member }">
-									<p>${member[0].name}님환영합니다</p>
+								<c:if test="${!empty sessionId }">
+									<p>${sessionId}님환영합니다</p>
 									<li class="nav-item"><a href="/member/logout"
 										class="nav-link">로그아웃</a></li>
 								</c:if>
@@ -144,10 +144,8 @@
 
 		if (result == 'success') {
 			alert('대여완료!');
-			return;
 		} else if (result == 'fail') {
 			alert('대여하지 못합니다.');
-			return;
 		}
 		$("#searchForm a").on("click", function(e) {
 			e.preventDefault();
