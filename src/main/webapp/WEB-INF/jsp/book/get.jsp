@@ -15,7 +15,7 @@
 
 				<!-- Elements -->
 				<header class="major">
-					<h1>Book</h1>
+					<h1 href="/book/list">Book</h1>
 					<p>도서 상세보기</p>
 				</header>
 				<!-- Table -->
@@ -53,11 +53,13 @@
 									readonly />
 							
 							</div>
+								<c:if test="${!empty member }">
 							<ul class="actions special">
 								<li>
-									<input class="remove" type="submit" class="button" value="대여" />
+									<input type="submit" class="button" value="대여" />
 								</li>
 							</ul>
+								</c:if>
 						</div>
 					</form>
 					</div>

@@ -18,5 +18,7 @@ public interface BookRepository {
 	public List<Book> getListWithPaging(Criteria cri);
 
 	int borrow(Book book);
+
+	public int addInfo(String id, int bookNum);
 	
 }

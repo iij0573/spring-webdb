@@ -11,6 +11,10 @@
 		<div class="wrapper">
 			<div class="inner">
 				<div>
+					<c:if test="${empty member }">
+						<p>로그인후 이용해주세요</p>
+					</c:if>
+					<c:if test="${!empty member }">
 					<header class="major">
 						<h1 class="home">마이페이지</h1>
 					</header>
@@ -40,6 +44,7 @@
 							</tbody>
 						</table>
 					</div>
+					</c:if>
 				</div>
 			</div>
 		</div>

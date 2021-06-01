@@ -13,10 +13,20 @@
 				<div>
 					<header class="major">
 						<h1 class="home">Book</h1>
-						<p>도서 목록</p>
+						<c:if test="${empty member }">
+						<li class="nav-item"><a href="/member/login"
+								class="nav-link">로그인</a></li>
+							<li class="nav-item"><a href="/member/signup"
+								class="nav-link">회원가입</a></li>
+						</c:if>
+						<c:if test="${!empty member }">
+						<p>${member[0].name} 님 환영합니다</p>
+						<li class="nav-item"><a href="/member/logout"
+								class="nav-link">로그아웃</a></li>
+						</c:if>
 					</header>
 					<h3>
-					<a href="/book/borrow" class="button small">마이페이지</a>
+					<a href="/member/myPage" class="button small">마이페이지</a>
 				</h3>
 					<div class="table-wrapper">
 						<table>
@@ -97,7 +107,7 @@
 	<script>
 	var actionForm = $("#actionForm");
 	var result = '${result}';
-	
+	var memberResult = '${memberResult}';
 	$(document).ready(function(){
 		$(".goGet")
 				.on("click", function(e) {
@@ -132,6 +142,10 @@
 		searchForm.find("input[name='pageNum']").val("1");
 		searchForm.submit();
 	});
+	
+	if(memberResult == 'success'){
+		alert('로그인완료!');
+	}
 	
 	</script>
 </body>

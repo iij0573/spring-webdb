@@ -2,11 +2,14 @@ package com.example.demo.repository;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.domain.Book;
+import com.example.demo.domain.BookInfo;
 import com.example.demo.pageMaker.Criteria;
 
 @Repository
@@ -16,10 +19,10 @@ public class BookDao implements BookRepository{
 	public BookDao(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
-	
+
 	@Override
 	public List<Book> bookList() {
-		List<Book> book = jdbcTemplate.query("select * from book", bookRowMapper());
+		List<Book> book = jdbcTemplate.query("SELECT * FROM BOOK", bookRowMapper());
 		return book;
 	}
 
@@ -31,10 +34,11 @@ public class BookDao implements BookRepository{
 			book.setAuthor(rs.getString("AUTHOR"));
 			book.setGrade(rs.getFloat("GRADE"));
 			book.setStock(rs.getInt("STOCK"));
-			book.setRental(rs.getBoolean("RENTAL"));
+			book.setRental(rs.getString("RENTAL"));
 			return book;
 		};
 	}
+
 
 	@Override
 	public int getTotal(Criteria cri) {
@@ -45,8 +49,6 @@ public class BookDao implements BookRepository{
 
 	@Override
 	public List<Book> getListWithPaging(Criteria cri) {
-		
-
 		return jdbcTemplate.query ("SELECT * FROM (\n" +
 				"    SELECT" +
 				"        ROW_NUMBER() over () AS ROWNO\n" +
@@ -59,12 +61,11 @@ public class BookDao implements BookRepository{
 				"    FROM BOOK\n" +
 				"    ) A\n" +
 				"WHERE A.ROWNO between ? and ?", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
-
 	}
 
 	@Override
 	public int borrow(Book book) {
-		String sql = "update book set stock= ?, rental = ? where booknum = ?";
+		String sql = "UPDATE BOOK SET STOCK = ?, RENTAL =? WHERE BOOKNUM =?";
 		book.setRental("대여불가능");
 		int stock = book.getStock() - 1;
 		if(stock < 0) {
@@ -77,7 +78,7 @@ public class BookDao implements BookRepository{
 	@Override
 	public void bookReturn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -85,5 +86,22 @@ public class BookDao implements BookRepository{
 		List<Book> book = jdbcTemplate.query("SELECT * FROM BOOK WHERE BOOKNUM = ?", bookRowMapper(), bookNum);
 		return book;
 	}
+
+	private RowMapper<BookInfo> infoRowMapper(){
+		return (rs, rowNum) -> {
+			BookInfo bookInfo = new BookInfo();
+			bookInfo.setId(rs.getString("id"));
+			bookInfo.setBookNum(rs.getInt("bookNum"));
+			return bookInfo;
+		};
+	}
+
+	@Override
+	public int addInfo(String id, int bookNum) {
+		String sql = "insert into bookinfo(id, bookNum) values(?, ?)";
+		int res = jdbcTemplate.update(sql, id , bookNum);
+		return res;
+	}
+
 
 }
