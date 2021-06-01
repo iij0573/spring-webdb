@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.domain.Book;
-import com.example.demo.domain.BookInfo;
+import com.example.demo.domain.MemberInfo;
 import com.example.demo.domain.Member;
 
 @Repository
@@ -44,9 +44,9 @@ public class MemberDao implements MemberRepository{
 		return jdbcTemplate.query(sql, new Object[] {id, pw}, MemberRowMapper());
 	}
 	
-	private RowMapper<BookInfo> infoRowMapper(){
+	private RowMapper<MemberInfo> infoRowMapper(){
 		return (rs, rowNum) -> {
-			BookInfo bookInfo = new BookInfo();
+			MemberInfo bookInfo = new MemberInfo();
 			bookInfo.setInfoNum(rs.getInt("infoNum"));
 			bookInfo.setId(rs.getString("id"));
 			bookInfo.setBookNum(rs.getInt("bookNum"));
@@ -56,7 +56,7 @@ public class MemberDao implements MemberRepository{
 
 
 	@Override
-	public List<BookInfo> getInfo(String id) {
+	public List<MemberInfo> getInfo(String id) {
 		String sql = "select * from bookInfo where id = ?";
 		return jdbcTemplate.query(sql, new Object[] {id}, infoRowMapper());
 	}

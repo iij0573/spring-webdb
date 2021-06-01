@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.domain.Book;
-import com.example.demo.domain.BookInfo;
+import com.example.demo.domain.MemberInfo;
 import com.example.demo.pageMaker.Criteria;
 
 @Repository
@@ -66,19 +66,26 @@ public class BookDao implements BookRepository{
 	@Override
 	public int borrow(Book book) {
 		String sql = "UPDATE BOOK SET STOCK = ?, RENTAL =? WHERE BOOKNUM =?";
-		book.setRental("대여불가능");
 		int stock = book.getStock() - 1;
-		if(stock < 0) {
+		if(stock <= 0) {
 			stock = 0;
+			book.setRental("대여불가능");
+		}else {
+			book.setRental("대여가능");
 		}
 		int count = jdbcTemplate.update(sql, new Object[] {stock, book.getRental(), book.getBookNum()});
 		return count;
 	}
 
 	@Override
-	public void bookReturn() {
-		// TODO Auto-generated method stub
-
+	public int bookReturn(Book book) {
+		String sql = "UPDATE BOOK SET STOCK = ?, RENTAL =? WHERE BOOKNUM =?";
+		int stock = book.getStock() + 1;
+		if(stock > 0) {
+			book.setRental("대여가능");
+		}
+		int count = jdbcTemplate.update(sql, new Object[] {stock, book.getRental(), book.getBookNum()});
+		return count;
 	}
 
 	@Override
@@ -87,9 +94,9 @@ public class BookDao implements BookRepository{
 		return book;
 	}
 
-	private RowMapper<BookInfo> infoRowMapper(){
+	private RowMapper<MemberInfo> infoRowMapper(){
 		return (rs, rowNum) -> {
-			BookInfo bookInfo = new BookInfo();
+			MemberInfo bookInfo = new MemberInfo();
 			bookInfo.setId(rs.getString("id"));
 			bookInfo.setBookNum(rs.getInt("bookNum"));
 			return bookInfo;

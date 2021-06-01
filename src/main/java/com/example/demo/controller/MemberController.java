@@ -32,12 +32,13 @@ public class MemberController {
 		this.bookService = bookService;
 	}
 	@GetMapping("/signup")
-	public void signup(Model model) {
+	public String signup(Model model, Member member) {
+		service.signup(member);
+		return "member/signup";
 	}
 	
 	@PostMapping("/signup")
 	public String signup2(Model model, Member member , HttpSession session) {
-		service.signup(member);
 		return "member/login";
 	}
 	@GetMapping("/login")
@@ -71,7 +72,7 @@ public class MemberController {
 	@GetMapping("/myPage")
 	public String myPage(Model model, @RequestParam("bookNum") int bookNum, HttpSession session) {
 		String id = (String)session.getAttribute("sessionId");
-		session.setAttribute("member", id);
+		session.setAttribute("id", id);
 		model.addAttribute("book", bookService.findBookNum(bookNum));
 		return "member/myPage";
 	}

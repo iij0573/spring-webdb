@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.BookInfo;
+import com.example.demo.domain.MemberInfo;
 import com.example.demo.domain.Member;
 import com.example.demo.repository.MemberRepository;
 
@@ -27,7 +27,7 @@ public class MemberService {
 	}
 	  
    
-    public List<BookInfo> getInfo(String id){
+    public List<MemberInfo> getInfo(String id){
     	return repository.getInfo(id);
     }
 }
