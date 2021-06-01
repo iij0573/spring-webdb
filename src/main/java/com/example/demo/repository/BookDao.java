@@ -2,10 +2,6 @@ package com.example.demo.repository;
 
 import java.util.List;
 
-import java.util.Optional;
-
-import javax.sql.DataSource;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -22,43 +18,8 @@ public class BookDao implements BookRepository{
 	}
 	
 	@Override
-	public Book borrow() {
-		
-		return null;
-	}
-
-
-	@Override
-	public void search() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void bookReturn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void bookAdd() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
 	public List<Book> bookList() {
 		List<Book> book = jdbcTemplate.query("select * from book", bookRowMapper());
-		return book;
-	}
-
-
-	@Override
-	public List<Book> read(int bookNum) {
-		List<Book> book = jdbcTemplate.query("SELECT * FROM BOOK WHERE BOOKNUM = ?", bookRowMapper(), bookNum);
 		return book;
 	}
 
@@ -85,6 +46,7 @@ public class BookDao implements BookRepository{
 	@Override
 	public List<Book> getListWithPaging(Criteria cri) {
 		
+
 		return jdbcTemplate.query ("SELECT * FROM (\n" +
 				"    SELECT" +
 				"        ROW_NUMBER() over () AS ROWNO\n" +
@@ -97,8 +59,31 @@ public class BookDao implements BookRepository{
 				"    FROM BOOK\n" +
 				"    ) A\n" +
 				"WHERE A.ROWNO between ? and ?", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
-				
+
 	}
-	
+
+	@Override
+	public int borrow(Book book) {
+		String sql = "update book set stock= ?, rental = ? where booknum = ?";
+		book.setRental("대여불가능");
+		int stock = book.getStock() - 1;
+		if(stock < 0) {
+			stock = 0;
+		}
+		int count = jdbcTemplate.update(sql, new Object[] {stock, book.getRental(), book.getBookNum()});
+		return count;
+	}
+
+	@Override
+	public void bookReturn() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Book> read(int bookNum) {
+		List<Book> book = jdbcTemplate.query("SELECT * FROM BOOK WHERE BOOKNUM = ?", bookRowMapper(), bookNum);
+		return book;
+	}
 
 }

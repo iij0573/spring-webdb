@@ -15,6 +15,9 @@
 						<h1 class="home">Book</h1>
 						<p>도서 목록</p>
 					</header>
+					<h3>
+					<a href="/book/borrow" class="button small">마이페이지</a>
+				</h3>
 					<div class="table-wrapper">
 						<table>
 							<thead>
@@ -42,6 +45,21 @@
 							</tbody>
 						</table>
 						</div>
+					<form method="get" action="/book/list" id="searchForm">
+					<div class="fields">
+						<div class="field">
+							<div style="text-align:center">
+								<select name="type">
+									<option value="T" ${pageMaker.cri.type == 'T' ? 'selected' : ''}>제목</option>
+								</select>
+								<input id="keyword" name="keyword" type="text" value="${pageMaker.cri.keyword}"/>
+								<input id="pageNum" type="hidden" value="${pageMaker.cri.pageNum}"/>
+								<input id="amount" type="hidden" value="${pageMaker.cri.amount}"/>
+								<a href="#" class="search button primary icon solid fa-search">검색</a>
+							</div>
+						</div>
+					</div>
+				</form>
 					<div class="big-width" style="text-align: center">
 					<c:if test="${pageMaker.prev}">
 						<a class="changePage" href="${pageMaker.startPage - 1}"><code>&lt;</code></a>
@@ -64,8 +82,8 @@
 					<form id="actionForm" action="/book/list" method="get">
 						<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
 						<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
-						<input type="hidden" name="type" value="${pageMaker.cri.type}">
-						<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
+						<%-- <input type="hidden" name="type" value="${pageMaker.cri.type}">
+						<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}"> --%>
 					</form>
 						
 					</div>
@@ -78,6 +96,7 @@
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script>
 	var actionForm = $("#actionForm");
+	var result = '${result}';
 	
 	$(document).ready(function(){
 		$(".goGet")
@@ -96,6 +115,23 @@
 		actionForm.find("input[name='pageNum']").val($(this).attr("href"));
 		actionForm.submit();
 	})
+	
+	if(result == 'success'){
+		alert('대여완료!');
+	}else if(result == 'fail'){
+		alert('대여하지 못합니다.')
+	}
+	$("#searchForm a").on("click", function(e){
+		e.preventDefault();
+		
+		if(!searchForm.find("input[name='keyword']").val()){
+			alert("키워드를 입력하세요");
+			return false;
+		}
+		
+		searchForm.find("input[name='pageNum']").val("1");
+		searchForm.submit();
+	});
 	
 	</script>
 </body>

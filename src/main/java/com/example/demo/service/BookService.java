@@ -36,4 +36,8 @@ public class BookService {
     public List<Book> getList(Criteria cri){
     	return bookRepository.getListWithPaging(cri);
     }
+    
+    public boolean borrow(Book book) {
+    	return bookRepository.borrow(book) == 1;
+    }
 }
