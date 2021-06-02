@@ -161,7 +161,6 @@
 
 		if (memberResult == 'success') {
 			alert('로그인완료!');
-			return;
 		}
 	</script>
 </body>

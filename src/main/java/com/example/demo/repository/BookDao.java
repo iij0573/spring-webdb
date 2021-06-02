@@ -56,7 +56,7 @@ public class BookDao implements BookRepository{
 				"        ,RENTAL\n" +
 				"    FROM BOOK\n" +
 				"    ) A\n" +
-				"WHERE A.ROWNO between ? and ?", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
+				"WHERE A.ROWNO between ? and ? ORDER BY BOOKNUM", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
 	}
 
 	@Override

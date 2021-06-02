@@ -20,8 +20,8 @@ public class PageDTO {
 		
 		//Math.ceil(실수 값) : 올림처리, 페이지에 게시글이 한 개라도 있더라도 올림으로서 페이지를 표시하기 위함.
 		
-		this.endPage = (int)(Math.ceil(cri.getPageNum() / 10.0) * 5);
-		this.startPage = this.endPage - 4;
+		this.endPage = (int)(Math.ceil(cri.getPageNum() / 10.0) * 6);
+		this.startPage = this.endPage - 5;
 		
 		this.realEnd = (int)(Math.ceil((total * 1.0) / cri.getAmount()));
 		

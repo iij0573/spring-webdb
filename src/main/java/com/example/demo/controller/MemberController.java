@@ -50,6 +50,7 @@ public class MemberController {
 	@PostMapping("/login") 
 	public String login(Model model, @RequestParam("sessionId") String id, @RequestParam("password") String pw, RedirectAttributes rttr, HttpSession session) {
 		List<Member> member = service.login(id, pw);
+		System.out.println(member);
 		if(member != null) {
 			rttr.addFlashAttribute("memberResult", "success");
 			session.setAttribute("member", service.login(id, pw));
@@ -67,7 +68,7 @@ public class MemberController {
 	@GetMapping("/logout")
 	public String logout(HttpSession session, RedirectAttributes rttr) {
 		session.invalidate();
-		rttr.addFlashAttribute("member", null);
+		rttr.addFlashAttribute("sessionId", null);
 		return "redirect:/book/list";
 	}
 	

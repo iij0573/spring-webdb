@@ -40,7 +40,6 @@
 		
 		if(memberResult == 'error'){
 			alert('로그인실패. 다시 시도하세요.');
-			return;
 		}
 	</script>
 
