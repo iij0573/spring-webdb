@@ -14,6 +14,7 @@
 				<div>
 					<header class="major">
 						<h1 class="home">로그인</h1>
+
 						<form method="post" action="/member/login">
 							<div class="row gtr-uniform">
 								<div class="col-6 col-12-xsmall">
@@ -25,11 +26,13 @@
 							</div>
 							<div class="col-12">
 									<ul class="actions">
-										<li><input type="submit" value="로그인"
-											class="primary"></li>
+										<li>
+											<input type="submit" value="로그인" class="primary">
+										</li>
 									</ul>
 								</div>
 						</form>
+
 					</header>
 				</div>
 			</div>

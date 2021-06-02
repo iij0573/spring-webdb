@@ -98,5 +98,14 @@ public class BookDao implements BookRepository{
 		return res;
 	}
 
+	@Override
+	public List<Book> findMemberBook(String id){
+		List<Book> book = jdbcTemplate.query("SELECT * FROM BOOK A\n" +
+				"JOIN MEMBERINFO B ON A.BOOKNUM = B.BOOKNUM\n" +
+				"JOIN MEMBER C ON B.ID = C.ID\n" +
+				"WHERE B.ID = ?", bookRowMapper(), id);
+		return book;
+	}
+
 
 }

@@ -13,24 +13,15 @@
 				<div>
 					<header class="major">
 						<h1 class="home">Book</h1>
-								<c:if test="${empty sessionId }">
-									<li class="nav-item"><a href="/member/signup"
-										class="nav-link">회원가입</a></li>
-									<li class="nav-item"><a href="/member/login"
-										class="nav-link">로그인</a></li>
-								</c:if>
-								<c:if test="${!empty sessionId }">
-									<p>${sessionId}님환영합니다</p>
-									<li class="nav-item"><a href="/member/logout"
-										class="nav-link">로그아웃</a></li>
-								</c:if>
+							<div class="userInfo">
+
+							</div>
 						<p>도서 목록</p>
 					</header>
 					<form method="post" action="/member/myPage">
-					<h3>
-						<input type="button" type="submit" <%-- onclick="location.href='/member/myPage$bookNum=${book.bookNum}'" --%> class="button small" value="마이페이지"></a>
-						
-					</h3>
+						<h3>
+							<input type="submit" class="button small" value="마이페이지"></a>
+						</h3>
 					</form>
 					<div class="table-wrapper">
 						<table>
@@ -108,30 +99,44 @@
 		</div>
 	</div>
 
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script>
+
 		var actionForm = $("#actionForm");
 		var result = '${result}';
 		var memberResult = '${memberResult}';
-		$(document)
-				.ready(
-						function() {
-							$(".goGet")
-									.on(
-											"click",
-											function(e) {
-												e.preventDefault();
-												actionForm
-														.append("<input type='hidden' name='bookNum' value='"
-																+ $(this).attr(
-																		"href")
-																+ "'>");
-												actionForm.attr("action",
-														"/book/get");
-												actionForm.submit();
-											});
-						});
+		$(document).ready(function() {
+
+			// 세션 정보
+			// var sessionId = sessionStorage.getItem("sessionId");
+
+			var sessionId = '<%=(String)session.getAttribute("sessionId")%>';
+
+			var $userInfo = $('.userInfo');
+
+			if(sessionId !== "null") {
+				$userInfo.append(
+						'<p>'+ sessionId +' 님환영합니다</p>' +
+						'<li class="nav-item">' +
+						'<a href="/member/logout" class="nav-link">로그아웃</a> ' +
+						'</li>');
+			}else{
+				$userInfo.append(
+						'<li class="nav-item">' +
+						'<a href="/member/signup" class="nav-link">회원가입</a>' +
+						'</li> ' +
+						'<li class="nav-item">' +
+						'<a href="/member/login" class="nav-link">로그인</a>' +
+						'</li>');
+			}
+
+			$(".goGet").on("click", function(e) {
+				e.preventDefault();
+				actionForm.append("<input type='hidden' name='bookNum' value='" + $(this).attr("href") + "'>");
+				actionForm.attr("action", "/book/get");
+				actionForm.submit();
+			});
+		});
 
 		$(".changePage").on("click", function(e) {
 			//a 태그의 동작을 막고 원하는 url에 페이지 번호를 넘겨주어야 한다.

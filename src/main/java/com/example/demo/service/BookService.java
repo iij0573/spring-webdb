@@ -28,6 +28,10 @@ public class BookService {
     public List<Book> findBookNum(int bookNum){
         return bookRepository.read(bookNum);
     }
+
+    public List<Book> findMemberBook(String id){
+        return bookRepository.findMemberBook(id);
+    }
     
     public int getTotal(Criteria cri) {
     	return bookRepository.getTotal(cri);

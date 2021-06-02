@@ -20,5 +20,7 @@ public interface BookRepository {
 	int borrow(Book book); //대여
 
 	public int addInfo(String id, int bookNum); //내가 대여한 책정보
+
+	List<Book> findMemberBook(String id);
 	
 }

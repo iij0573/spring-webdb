@@ -34,13 +34,19 @@ public class MemberController {
 	@GetMapping("/signup")
 	public void signup(Model model, Member member) {
 	}
-	
+
+	/**
+	 * 회원가입 로직
+	 * @param model
+	 * @param member 회원정보
+	 * @param session
+	 * @return
+	 */
 	@PostMapping("/signup")
 	public String signup2(Model model, Member member , HttpSession session) {
 		if(service.signup(member)) {
 			System.out.println("회원가입 성공");
 		}
-		System.out.println(service.signup(member));
 		return "member/login";
 	}
 	@GetMapping("/login")
@@ -54,8 +60,14 @@ public class MemberController {
 		if(member != null) {
 			rttr.addFlashAttribute("memberResult", "success");
 		/*	session.setAttribute("member", service.login(id, pw));*/
-			rttr.addFlashAttribute("sessionId",id);
+			rttr.addFlashAttribute("sessionId", id);
 			System.out.println(id);
+			// 세션 설정
+			session.setAttribute("sessionId", id);
+			// 세션 유지시간 설정(초단위)
+			// 60*30 = 30분
+			session.setMaxInactiveInterval(30*60);
+
 		}else if(member.isEmpty()){
 			rttr.addFlashAttribute("memberResult", "error");
 			return "redirect:/member/login";
@@ -72,13 +84,18 @@ public class MemberController {
 	}
 	
 	@PostMapping("/myPage")
-	public String myPage(Model model, @RequestParam("bookNum") int bookNum, HttpSession session) {
+	public String myPage(Model model, HttpSession session) {
 		String id = (String)session.getAttribute("sessionId");
 		System.out.println(id);
-		if(bookService.addInfo(id, bookNum)) {
-			System.out.println("추가성공");
-			model.addAttribute("book", bookService.findBookNum(bookNum));
+
+		if(id != null){
+			model.addAttribute("book", bookService.findMemberBook(id));
 		}
+
+//		if(bookService.addInfo(id, bookNum)) {
+//			System.out.println("추가성공");
+//			model.addAttribute("book", bookService.findBookNum(bookNum));
+//		}
 		return "member/myPage";
 	}
 }

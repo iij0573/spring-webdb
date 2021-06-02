@@ -31,6 +31,12 @@ public class BookContoller {
 		this.memberService = memberService;
 	}
 
+	/**
+	 * 리스트 화면
+	 * @param cri
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/list")
 	public String list(Criteria cri, Model model) {
 		model.addAttribute("list", service.getList(cri));
@@ -51,7 +57,6 @@ public class BookContoller {
 
 	@GetMapping("/get")
 	public void get(@RequestParam("bookNum") int bookNum, Model model) {
-
 		model.addAttribute("book", service.findBookNum(bookNum));
 	}
 
