@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/book/*")
 public class BookContoller {
 
 	private final BookService service;
@@ -30,31 +31,25 @@ public class BookContoller {
 		this.memberService = memberService;
 	}
 
-	@GetMapping("book/list")
+	@GetMapping("/list")
 	public String list(Criteria cri, Model model) {
 		model.addAttribute("list", service.getList(cri));
 		model.addAttribute("pageMaker", new PageDTO(cri, service.getTotal(cri)));
 		return "book/bookList";
 	}
 
-	@PostMapping("book/borrow")
+	@PostMapping("/borrow")
 	public String myPage(Book book, @RequestParam("bookNum") int bookNum, Model model, RedirectAttributes rttr, HttpSession session) {
 		if (service.borrow(book)) {
 			rttr.addFlashAttribute("result", "success");
-			model.addAttribute("book", service.findBookNum(bookNum));
 			if (book.getStock() == 0) {
 				rttr.addFlashAttribute("result", "fail");
 			}
 		}
-		String id = (String)session.getAttribute("sessionId");
-		System.out.println(id);
-		if (service.addInfo(id, bookNum)) {
-			System.out.println("memberService.g추가성공");
-		}
 		return "redirect:/book/list";
 	}
 
-	@GetMapping({ "book/get" })
+	@GetMapping("/get")
 	public void get(@RequestParam("bookNum") int bookNum, Model model) {
 
 		model.addAttribute("book", service.findBookNum(bookNum));

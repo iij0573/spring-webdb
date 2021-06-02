@@ -1,15 +1,11 @@
 package com.example.demo.repository;
 
 import java.util.List;
-
-import javax.sql.DataSource;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.domain.Book;
-import com.example.demo.domain.BookInfo;
 import com.example.demo.pageMaker.Criteria;
 
 @Repository
@@ -60,25 +56,32 @@ public class BookDao implements BookRepository{
 				"        ,RENTAL\n" +
 				"    FROM BOOK\n" +
 				"    ) A\n" +
-				"WHERE A.ROWNO between ? and ?", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
+				"WHERE A.ROWNO between ? and ? ORDER BY BOOKNUM", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
 	}
 
 	@Override
 	public int borrow(Book book) {
 		String sql = "UPDATE BOOK SET STOCK = ?, RENTAL =? WHERE BOOKNUM =?";
-		book.setRental("대여불가능");
 		int stock = book.getStock() - 1;
-		if(stock < 0) {
+		if(stock <= 0) {
 			stock = 0;
+			book.setRental("대여불가능");
+		}else {
+			book.setRental("대여가능");
 		}
 		int count = jdbcTemplate.update(sql, new Object[] {stock, book.getRental(), book.getBookNum()});
 		return count;
 	}
 
 	@Override
-	public void bookReturn() {
-		// TODO Auto-generated method stub
-
+	public int bookReturn(Book book) {
+		String sql = "UPDATE BOOK SET STOCK = ?, RENTAL =? WHERE BOOKNUM =?";
+		int stock = book.getStock() + 1;
+		if(stock > 0) {
+			book.setRental("대여가능");
+		}
+		int count = jdbcTemplate.update(sql, new Object[] {stock, book.getRental(), book.getBookNum()});
+		return count;
 	}
 
 	@Override
@@ -87,18 +90,10 @@ public class BookDao implements BookRepository{
 		return book;
 	}
 
-	private RowMapper<BookInfo> infoRowMapper(){
-		return (rs, rowNum) -> {
-			BookInfo bookInfo = new BookInfo();
-			bookInfo.setId(rs.getString("id"));
-			bookInfo.setBookNum(rs.getInt("bookNum"));
-			return bookInfo;
-		};
-	}
 
 	@Override
 	public int addInfo(String id, int bookNum) {
-		String sql = "insert into bookinfo(id, bookNum) values(?, ?)";
+		String sql = "INSERT INTO MEMBERINFO(ID, BOOKNUM) VALUES(?, ?)";
 		int res = jdbcTemplate.update(sql, id , bookNum);
 		return res;
 	}

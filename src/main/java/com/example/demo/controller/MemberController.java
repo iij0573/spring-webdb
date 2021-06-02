@@ -32,12 +32,15 @@ public class MemberController {
 		this.bookService = bookService;
 	}
 	@GetMapping("/signup")
-	public void signup(Model model) {
+	public void signup(Model model, Member member) {
 	}
 	
 	@PostMapping("/signup")
 	public String signup2(Model model, Member member , HttpSession session) {
-		service.signup(member);
+		if(service.signup(member)) {
+			System.out.println("회원가입 성공");
+		}
+		System.out.println(service.signup(member));
 		return "member/login";
 	}
 	@GetMapping("/login")
@@ -47,32 +50,35 @@ public class MemberController {
 	@PostMapping("/login") 
 	public String login(Model model, @RequestParam("sessionId") String id, @RequestParam("password") String pw, RedirectAttributes rttr, HttpSession session) {
 		List<Member> member = service.login(id, pw);
+		System.out.println(member);
 		if(member != null) {
 			rttr.addFlashAttribute("memberResult", "success");
-			session.setAttribute("member", service.login(id, pw));
-			session.setAttribute("sessionId", id);
+		/*	session.setAttribute("member", service.login(id, pw));*/
 			rttr.addFlashAttribute("sessionId",id);
 			System.out.println(id);
-			return "redirect:/book/list";
-		}else if(member == null){
+		}else if(member.isEmpty()){
 			rttr.addFlashAttribute("memberResult", "error");
 			return "redirect:/member/login";
 		}
-		return "redirect:/";
+		return "redirect:/book/list";
+		
 	}
 	
 	@GetMapping("/logout")
 	public String logout(HttpSession session, RedirectAttributes rttr) {
 		session.invalidate();
-		rttr.addFlashAttribute("member", null);
+		rttr.addFlashAttribute("sessionId", null);
 		return "redirect:/book/list";
 	}
 	
-	@GetMapping("/myPage")
+	@PostMapping("/myPage")
 	public String myPage(Model model, @RequestParam("bookNum") int bookNum, HttpSession session) {
 		String id = (String)session.getAttribute("sessionId");
-		session.setAttribute("member", id);
-		model.addAttribute("book", bookService.findBookNum(bookNum));
+		System.out.println(id);
+		if(bookService.addInfo(id, bookNum)) {
+			System.out.println("추가성공");
+			model.addAttribute("book", bookService.findBookNum(bookNum));
+		}
 		return "member/myPage";
 	}
 }

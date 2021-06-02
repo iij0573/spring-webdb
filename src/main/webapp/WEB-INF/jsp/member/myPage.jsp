@@ -11,10 +11,10 @@
 		<div class="wrapper">
 			<div class="inner">
 				<div>
-					<c:if test="${empty member }">
+					<c:if test="${empty id}">
 						<p>로그인후 이용해주세요</p>
 					</c:if>
-					<c:if test="${!empty member }">
+					<c:if test="${!empty id }">
 					<header class="major">
 						<h1 class="home">마이페이지</h1>
 					</header>

@@ -7,7 +7,7 @@ import com.example.demo.pageMaker.Criteria;
 
 public interface BookRepository {
 
-	void bookReturn();
+	public int bookReturn(Book book); //반납
 
 	List<Book> read(int bookNum);
 
@@ -17,8 +17,8 @@ public interface BookRepository {
 	
 	public List<Book> getListWithPaging(Criteria cri);
 
-	int borrow(Book book);
+	int borrow(Book book); //대여
 
-	public int addInfo(String id, int bookNum);
+	public int addInfo(String id, int bookNum); //내가 대여한 책정보
 	
 }
