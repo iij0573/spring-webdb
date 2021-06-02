@@ -54,6 +54,8 @@
 							
 							</div>
 								<c:if test="${!empty member }">
+									alert("로그인후 이용하세요.");
+								<a href="/member/login";></a>
 							<ul class="actions special">
 								<li>
 									<input type="submit" class="button" value="대여" />

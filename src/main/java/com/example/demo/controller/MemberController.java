@@ -53,16 +53,15 @@ public class MemberController {
 		System.out.println(member);
 		if(member != null) {
 			rttr.addFlashAttribute("memberResult", "success");
-			session.setAttribute("member", service.login(id, pw));
-			session.setAttribute("sessionId", id);
+		/*	session.setAttribute("member", service.login(id, pw));*/
 			rttr.addFlashAttribute("sessionId",id);
 			System.out.println(id);
-			return "redirect:/book/list";
-		}else if(member == null){
+		}else if(member.isEmpty()){
 			rttr.addFlashAttribute("memberResult", "error");
 			return "redirect:/member/login";
 		}
-		return "redirect:/";
+		return "redirect:/book/list";
+		
 	}
 	
 	@GetMapping("/logout")
@@ -72,11 +71,14 @@ public class MemberController {
 		return "redirect:/book/list";
 	}
 	
-	@GetMapping("/myPage")
+	@PostMapping("/myPage")
 	public String myPage(Model model, @RequestParam("bookNum") int bookNum, HttpSession session) {
 		String id = (String)session.getAttribute("sessionId");
-		session.setAttribute("id", id);
-		model.addAttribute("book", bookService.findBookNum(bookNum));
+		System.out.println(id);
+		if(bookService.addInfo(id, bookNum)) {
+			System.out.println("추가성공");
+			model.addAttribute("book", bookService.findBookNum(bookNum));
+		}
 		return "member/myPage";
 	}
 }

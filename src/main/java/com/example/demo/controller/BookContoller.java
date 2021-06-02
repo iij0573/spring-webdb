@@ -42,15 +42,9 @@ public class BookContoller {
 	public String myPage(Book book, @RequestParam("bookNum") int bookNum, Model model, RedirectAttributes rttr, HttpSession session) {
 		if (service.borrow(book)) {
 			rttr.addFlashAttribute("result", "success");
-			model.addAttribute("book", service.findBookNum(bookNum));
 			if (book.getStock() == 0) {
 				rttr.addFlashAttribute("result", "fail");
 			}
-		}
-		String id = (String)session.getAttribute("sessionId");
-		System.out.println(id);
-		if (service.addInfo(id, bookNum)) {
-			System.out.println("memberService.g추가성공");
 		}
 		return "redirect:/book/list";
 	}

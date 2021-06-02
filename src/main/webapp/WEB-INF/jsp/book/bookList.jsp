@@ -11,9 +11,8 @@
 		<div class="wrapper">
 			<div class="inner">
 				<div>
-						<div class="collapse navbar-collapse" id="ftco-nav">
-
-							<ul class="navbar-nav ml-auto">
+					<header class="major">
+						<h1 class="home">Book</h1>
 								<c:if test="${empty sessionId }">
 									<li class="nav-item"><a href="/member/signup"
 										class="nav-link">회원가입</a></li>
@@ -25,15 +24,14 @@
 									<li class="nav-item"><a href="/member/logout"
 										class="nav-link">로그아웃</a></li>
 								</c:if>
-							</ul>
-						</div>
-					<header class="major">
-						<h1 class="home">Book</h1>
 						<p>도서 목록</p>
 					</header>
+					<form method="post" action="/member/myPage">
 					<h3>
-						<a href="/member/myPage" class="button small">마이페이지</a>
+						<input type="button" type="submit" <%-- onclick="location.href='/member/myPage$bookNum=${book.bookNum}'" --%> class="button small" value="마이페이지"></a>
+						
 					</h3>
+					</form>
 					<div class="table-wrapper">
 						<table>
 							<thead>
