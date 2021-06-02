@@ -1,13 +1,10 @@
 package com.example.demo.repository;
 
 import java.util.List;
-
-import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.domain.Book;
 import com.example.demo.domain.MemberInfo;
 import com.example.demo.domain.Member;
 
@@ -33,13 +30,13 @@ public class MemberDao implements MemberRepository{
 
 	@Override
 	public int singup(Member member) {
-		String sql = "INSERT INTO member(ID, NAME, EMAIL, PASSWORD, TEL) VALUES(?,?,?,?,?)";
+		String sql = "INSERT INTO MEMBER(ID, NAME, EMAIL, PASSWORD, TEL) VALUES(?,?,?,?,?)";
 		return jdbcTemplate.update(sql, member.getId(), member.getName(), member.getEmail(), member.getPassword(), member.getTel());
 	}
 
 	@Override
 	public List<Member> login(String id, String pw) {
-		String sql = "SELECT * FROM member WHERE ID = ? AND PASSWORD = ?";
+		String sql = "SELECT * FROM MEMBER WHERE ID = ? AND PASSWORD = ?";
 		return jdbcTemplate.query(sql, new Object[] {id, pw}, MemberRowMapper());
 	}
 	

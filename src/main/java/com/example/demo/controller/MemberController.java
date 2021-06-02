@@ -40,6 +40,7 @@ public class MemberController {
 		if(service.signup(member)) {
 			System.out.println("회원가입 성공");
 		}
+		System.out.println(service.signup(member));
 		return "member/login";
 	}
 	@GetMapping("/login")

@@ -1,15 +1,11 @@
 package com.example.demo.repository;
 
 import java.util.List;
-
-import javax.sql.DataSource;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.domain.Book;
-import com.example.demo.domain.MemberInfo;
 import com.example.demo.pageMaker.Criteria;
 
 @Repository
