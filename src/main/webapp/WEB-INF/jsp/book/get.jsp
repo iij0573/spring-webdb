@@ -24,7 +24,7 @@
 				</h3>
 				<div class="content">
 					<div class="form">
-					<form method="post" action="/book/borrow" id="actionForm">
+					<form method="post" action="/book/borrow">
 						<div class="fields">
 							<div class="field">
 								<h4>번호</h4>
@@ -54,12 +54,10 @@
 							
 							</div>
 							<ul class="actions special">
-								<c:if test="${empty member }">
-									alert("로그인후 이용하세요.");
 								<li>
 									<input type="submit" class="button" value="대여" />
 								</li>
-								</c:if>
+								
 							</ul>
 						</div>
 					</form>

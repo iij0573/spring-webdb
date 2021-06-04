@@ -33,14 +33,14 @@
 									</tr>
 								</thead>
 								<tbody>
-									<form mehtod="post" action="/member/return">
+									<form method="get" action="/book/return" id="actionForm">
 										<c:forEach var="book" items="${book}">
 											<tr>
 												<td>${book.bookNum}</td>
-												<td><a class="goGet" href="${book.bookNum}">${book.title}</a></td>
+												<td><a href="${book.bookNum}">${book.title}</a></td>
 												<td class="author">${book.author}</td>
 												<td class="grade">${book.grade}</td>
-												<input type="submit" class="button" value="반납"></input>
+												<td><input type="button" value="반납" onclick="location.href='/book/return?bookNum=${book.bookNum}'"></input></td>
 												</tr>
 										</c:forEach>
 									</form>
@@ -53,5 +53,6 @@
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>

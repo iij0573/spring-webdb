@@ -23,4 +23,8 @@ public interface BookRepository {
 
 	List<Book> findMemberBook(String id);
 	
+	int popMemberInfo(int bookNum);
+	
+	List<Book> Search(String title);
+	
 }

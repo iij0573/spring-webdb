@@ -18,7 +18,7 @@ public class BookDao implements BookRepository{
 
 	@Override
 	public List<Book> bookList() {
-		List<Book> book = jdbcTemplate.query("SELECT * FROM BOOK", bookRowMapper());
+		List<Book> book = jdbcTemplate.query("SELECT * FROM book", bookRowMapper());
 		return book;
 	}
 
@@ -38,7 +38,7 @@ public class BookDao implements BookRepository{
 
 	@Override
 	public int getTotal(Criteria cri) {
-		String sql = "SELECT COUNT(*) FROM BOOK WHERE BOOKNUM > 0";
+		String sql = "SELECT COUNT(*) FROM book WHERE BOOKNUM > 0";
 		int count = jdbcTemplate.queryForObject(sql, Integer.class);
 		return count;
 	}
@@ -54,14 +54,14 @@ public class BookDao implements BookRepository{
 				"        ,GRADE\n" +
 				"        ,STOCK\n" +
 				"        ,RENTAL\n" +
-				"    FROM BOOK\n" +
+				"    FROM book\n" +
 				"    ) A\n" +
 				"WHERE A.ROWNO between ? and ? ORDER BY BOOKNUM", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
 	}
 
 	@Override
 	public int borrow(Book book) {
-		String sql = "UPDATE BOOK SET STOCK = ?, RENTAL =? WHERE BOOKNUM =?";
+		String sql = "UPDATE book SET STOCK = ?, RENTAL =? WHERE BOOKNUM =?";
 		int stock = book.getStock() - 1;
 		if(stock <= 0) {
 			stock = 0;
@@ -75,7 +75,7 @@ public class BookDao implements BookRepository{
 
 	@Override
 	public int bookReturn(Book book) {
-		String sql = "UPDATE BOOK SET STOCK = ?, RENTAL =? WHERE BOOKNUM =?";
+		String sql = "UPDATE book SET STOCK = ?, RENTAL =? WHERE BOOKNUM =?";
 		int stock = book.getStock() + 1;
 		if(stock > 0) {
 			book.setRental("대여가능");
@@ -86,24 +86,37 @@ public class BookDao implements BookRepository{
 
 	@Override
 	public List<Book> read(int bookNum) {
-		List<Book> book = jdbcTemplate.query("SELECT * FROM BOOK WHERE BOOKNUM = ?", bookRowMapper(), bookNum);
+		List<Book> book = jdbcTemplate.query("SELECT * FROM book WHERE BOOKNUM = ?", bookRowMapper(), bookNum);
 		return book;
 	}
 
 
 	@Override
 	public int addInfo(String id, int bookNum) {
-		String sql = "INSERT INTO MEMBERINFO(ID, BOOKNUM) VALUES(?, ?)";
+		String sql = "INSERT INTO memberinfo(ID, BOOKNUM) VALUES(?, ?)";
 		int res = jdbcTemplate.update(sql, id , bookNum);
 		return res;
 	}
 
 	@Override
 	public List<Book> findMemberBook(String id){
-		List<Book> book = jdbcTemplate.query("SELECT * FROM BOOK A\n" +
-				"JOIN MEMBERINFO B ON A.BOOKNUM = B.BOOKNUM\n" +
-				"JOIN MEMBER C ON B.ID = C.ID\n" +
+		List<Book> book = jdbcTemplate.query("SELECT * FROM book A\n" +
+				"JOIN memberinfo B ON A.BOOKNUM = B.BOOKNUM\n" +
+				"JOIN member C ON B.ID = C.ID\n" +
 				"WHERE B.ID = ?", bookRowMapper(), id);
+		return book;
+	}
+
+	@Override
+	public int popMemberInfo(int bookNum) {
+		String sql = "delete from memberinfo where BOOKNUM = ?";
+		int res = jdbcTemplate.update(sql, bookNum);
+		return res;
+	}
+
+	@Override
+	public List<Book> Search(String title) {
+		List<Book> book = jdbcTemplate.query("select * from book where title= ?", bookRowMapper(), title);
 		return book;
 	}
 

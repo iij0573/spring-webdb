@@ -16,7 +16,6 @@
 							<div class="userInfo">
 
 							</div>
-						<p>도서 목록</p>
 					</header>
 					<form method="post" action="/member/myPage">
 						<h3>
@@ -50,18 +49,29 @@
 							</tbody>
 						</table>
 					</div>
-					<form method="get" action="/book/list" id="searchForm">
+					<form method="post" action="/book/search">
 						<div class="fields">
 							<div class="field">
 								<div style="text-align: center">
 									<select name="type">
-										<option value="T"
-											${pageMaker.cri.type == 'T' ? 'selected' : ''}>제목</option>
-									</select> <input id="keyword" name="keyword" type="text"
-										value="${pageMaker.cri.keyword}" /> <input id="pageNum"
-										type="hidden" value="${pageMaker.cri.pageNum}" /> <input
-										id="amount" type="hidden" value="${pageMaker.cri.amount}" />
-									<a href="#" class="search button primary icon solid fa-search">검색</a>
+										<option value="{book.title}">제목</option>
+										<input type="text" name="title" value="${book.title }"></input>
+									</select>
+							<c:choose >
+							<c:when test="${!empty list }">
+								<c:forEach var="book" items="${list}">
+									<tr>
+										<td>${book.bookNum}</td>
+										<td><a class="goGet" href="${book.bookNum}">${book.title}</a></td>
+										<td class="author">${book.author}</td>
+										<td class="grade">${book.grade}</td>
+										<td class="stock">${book.stock}</td>
+										<td class="rental">${book.rental}</td>
+									</tr>
+								</c:forEach>
+							</c:when>
+							</c:choose>
+								<a onclick="location.href='/book/search?title=${book.title }'" class="search button primary icon solid fa-search">검색</a>
 								</div>
 							</div>
 						</div>
@@ -164,6 +174,9 @@
 
 		if (memberResult == 'success') {
 			alert('로그인완료!');
+		}
+		if(result == 'returnSuccess'){
+			alert('반납완료!!!');
 		}
 	</script>
 </body>

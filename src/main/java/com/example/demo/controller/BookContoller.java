@@ -23,12 +23,10 @@ import javax.servlet.http.HttpSession;
 public class BookContoller {
 
 	private final BookService service;
-	private final MemberService memberService;
 
 	@Autowired
-	public BookContoller(BookService service, MemberService memberService) {
+	public BookContoller(BookService service) {
 		this.service = service;
-		this.memberService = memberService;
 	}
 
 	/**
@@ -61,6 +59,23 @@ public class BookContoller {
 	@GetMapping("/get")
 	public void get(@RequestParam("bookNum") int bookNum, Model model) {
 		model.addAttribute("book", service.findBookNum(bookNum));
+	}
+	
+	@GetMapping("/return")
+	public String bookReturn(Book book, Model model, @RequestParam("bookNum") int bookNum, RedirectAttributes rttr) {
+		System.out.println(bookNum);
+		if(service.bookReturn(book) && service.popMemberinfo(bookNum)) {
+			rttr.addFlashAttribute("result", "returnSuccess");
+		}
+		System.out.println("삭제성공");
+		return "redirect:/book/list";
+	}
+	
+	@PostMapping("/search")
+	public String search(Model model, @RequestParam("title") String title) {
+		List<Book> book = service.search(title);
+		model.addAttribute("list", book);
+		return "redirect:/book/list";
 	}
 
 }

@@ -49,4 +49,16 @@ public class BookService {
    	 	return bookRepository.addInfo(id, bookNum) == 1;
    }
    
+    public boolean bookReturn(Book book) {
+    	return bookRepository.bookReturn(book) == 1;
+    }
+    
+    public boolean popMemberinfo(int bookNum) {
+    	return bookRepository.popMemberInfo(bookNum) == 1;
+    }
+    
+    public List<Book> search(String title){
+    	return bookRepository.Search(title);
+    }
+   
 }
