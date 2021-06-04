@@ -45,7 +45,7 @@ public class MemberController {
 	@PostMapping("/signup")
 	public String signup2(Model model, Member member , HttpSession session) {
 		if(service.signup(member)) {
-			System.out.println("회원가입 성공");
+			model.addAttribute("result", "signup");
 		}
 		return "member/login";
 	}
@@ -87,15 +87,11 @@ public class MemberController {
 	public String myPage(Model model, HttpSession session) {
 		String id = (String)session.getAttribute("sessionId");
 		System.out.println(id);
-
+		model.addAttribute("id", id);
 		if(id != null){
 			model.addAttribute("book", bookService.findMemberBook(id));
+			System.out.println(bookService.findMemberBook(id));
 		}
-
-//		if(bookService.addInfo(id, bookNum)) {
-//			System.out.println("추가성공");
-//			model.addAttribute("book", bookService.findBookNum(bookNum));
-//		}
 		return "member/myPage";
 	}
 }

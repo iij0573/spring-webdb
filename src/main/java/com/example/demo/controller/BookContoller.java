@@ -48,6 +48,9 @@ public class BookContoller {
 	public String myPage(Book book, @RequestParam("bookNum") int bookNum, Model model, RedirectAttributes rttr, HttpSession session) {
 		if (service.borrow(book)) {
 			rttr.addFlashAttribute("result", "success");
+			String id = (String)session.getAttribute("sessionId");
+			System.out.println(id);
+			service.addInfo(id, bookNum);
 			if (book.getStock() == 0) {
 				rttr.addFlashAttribute("result", "fail");
 			}

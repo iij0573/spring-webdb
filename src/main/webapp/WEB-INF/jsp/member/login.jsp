@@ -40,9 +40,12 @@
 	</div>
 	<script>
 		var memberResult = "${memberResult}";
-		
+		var result = "${result}";
 		if(memberResult == 'error'){
 			alert('로그인실패. 다시 시도하세요.');
+		}
+		if(result == 'signup'){
+			alert('회원가입 성공! 로그인하세요');
 		}
 	</script>
 
