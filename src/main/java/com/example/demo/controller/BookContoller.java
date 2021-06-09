@@ -38,15 +38,23 @@ public class BookContoller {
 	@GetMapping("/list")
 	public String list(Criteria cri, Model model) {
 		model.addAttribute("list", service.getList(cri));
+		System.out.println(cri.getKeyword());
 		model.addAttribute("pageMaker", new PageDTO(cri, service.getTotal(cri)));
+		if(cri.getKeyword() != null) {
+			
+		}
+		System.out.println(service.getTotal(cri));
 		return "book/bookList";
 	}
 
 	@PostMapping("/borrow")
 	public String myPage(Book book, @RequestParam("bookNum") int bookNum, Model model, RedirectAttributes rttr, HttpSession session) {
-		if (service.borrow(book)) {
+		String id = (String)session.getAttribute("sessionId");
+		if(id == null) {
+			rttr.addFlashAttribute("result", "IdNull");
+			return "redirect:/member/login";
+		} else if (id != null && service.borrow(book)) {
 			rttr.addFlashAttribute("result", "success");
-			String id = (String)session.getAttribute("sessionId");
 			System.out.println(id);
 			service.addInfo(id, bookNum);
 			if (book.getStock() == 0) {
@@ -57,8 +65,10 @@ public class BookContoller {
 	}
 
 	@GetMapping("/get")
-	public void get(@RequestParam("bookNum") int bookNum, Model model) {
+	public void get(@RequestParam("bookNum") int bookNum, Model model, HttpSession session) {
 		model.addAttribute("book", service.findBookNum(bookNum));
+		String id = (String)session.getAttribute("sessionId");
+		model.addAttribute("sessionId", id);
 	}
 	
 	@GetMapping("/return")
@@ -70,12 +80,6 @@ public class BookContoller {
 		System.out.println("삭제성공");
 		return "redirect:/book/list";
 	}
-	
-	@PostMapping("/search")
-	public String search(Model model, @RequestParam("title") String title) {
-		List<Book> book = service.search(title);
-		model.addAttribute("list", book);
-		return "redirect:/book/list";
-	}
+
 
 }

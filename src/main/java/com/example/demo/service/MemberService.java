@@ -22,12 +22,20 @@ public class MemberService {
 		 return repository.singup(member) == 1;
 	}
 	
-	public List<Member> login(String id, String pw) {
+	public int login(String id, String pw) {
 		return repository.login(id, pw);
 	}
 	  
    
     public List<MemberInfo> getInfo(String id){
     	return repository.getInfo(id);
+    }
+    
+    public String findId(String name, String email) {
+    	return repository.findId(name, email);
+    }
+    
+    public boolean updatePw(Member member) {
+    	return repository.updatePw(member) == 1;
     }
 }

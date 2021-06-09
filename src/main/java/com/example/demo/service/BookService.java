@@ -58,7 +58,7 @@ public class BookService {
     }
     
     public List<Book> search(String title){
-    	return bookRepository.Search(title);
+    	return bookRepository.search(title);
     }
    
 }

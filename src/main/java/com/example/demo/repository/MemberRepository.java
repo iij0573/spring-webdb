@@ -9,7 +9,11 @@ public interface MemberRepository {
 
 	public int singup(Member member);
 	
-	public List<Member> login(String id, String pw);
+	public int login(String id, String pw);
 	
 	public List<MemberInfo> getInfo(String id);
+	
+	public String findId(String name, String email);
+	
+	public int updatePw(Member member);
 }

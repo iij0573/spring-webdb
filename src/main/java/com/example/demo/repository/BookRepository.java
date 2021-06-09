@@ -25,6 +25,6 @@ public interface BookRepository {
 	
 	int popMemberInfo(int bookNum);
 	
-	List<Book> Search(String title);
+	List<Book> search(String title);
 	
 }

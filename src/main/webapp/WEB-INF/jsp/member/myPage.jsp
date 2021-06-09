@@ -33,7 +33,6 @@
 									</tr>
 								</thead>
 								<tbody>
-									<form method="get" action="/book/return" id="actionForm">
 										<c:forEach var="book" items="${book}">
 											<tr>
 												<td>${book.bookNum}</td>
@@ -43,7 +42,6 @@
 												<td><input type="button" value="반납" onclick="location.href='/book/return?bookNum=${book.bookNum}'"></input></td>
 												</tr>
 										</c:forEach>
-									</form>
 								</tbody>
 							</table>
 						</div>

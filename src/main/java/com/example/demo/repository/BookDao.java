@@ -38,13 +38,27 @@ public class BookDao implements BookRepository{
 
 	@Override
 	public int getTotal(Criteria cri) {
-		String sql = "SELECT COUNT(*) FROM book WHERE BOOKNUM > 0";
-		int count = jdbcTemplate.queryForObject(sql, Integer.class);
-		return count;
+			String sql = "SELECT COUNT(*) FROM book WHERE BOOKNUM > 0";
+			int count = jdbcTemplate.queryForObject(sql, Integer.class);
+			return count;
 	}
 
-	@Override
+/*	@Override
 	public List<Book> getListWithPaging(Criteria cri) {
+		if(cri.getKeyword()!=null && cri.getType() != null) {
+		return jdbcTemplate.query ("SELECT * FROM (\n" +
+				"    SELECT" +
+				"        ROW_NUMBER() over () AS ROWNO\n" +
+				"        ,BOOKNUM\n" +
+				"        ,TITLE\n" +
+				"        ,AUTHOR\n" +
+				"        ,GRADE\n" +
+				"        ,STOCK\n" +
+				"        ,RENTAL\n" +
+				"    FROM book\n" +
+				"    ) A\n" +
+				"WHERE A.ROWNO between ? and ? and TITLE = ? ORDER BY BOOKNUM", new Object[] {cri.getPageNum(), cri.getAmount(), cri.getKeyword()}, bookRowMapper());
+	}else if(cri.getKeyword() == null) {
 		return jdbcTemplate.query ("SELECT * FROM (\n" +
 				"    SELECT" +
 				"        ROW_NUMBER() over () AS ROWNO\n" +
@@ -58,7 +72,21 @@ public class BookDao implements BookRepository{
 				"    ) A\n" +
 				"WHERE A.ROWNO between ? and ? ORDER BY BOOKNUM", new Object[] {cri.getPageNum(), cri.getAmount()}, bookRowMapper());
 	}
-
+		return null;
+	}*/
+	
+	@Override
+	public List<Book> getListWithPaging(Criteria cri) {
+		if(cri.getKeyword() == null) {
+		String sql = "select @rownum:=@rownum+1 as no, BOOKNUM, TITLE, AUTHOR, GRADE, STOCK, RENTAL, AUTHOR, GRADE,STOCK,RENTAL from book\r\n" + 
+				"LIMIT ?, ?";
+		return jdbcTemplate.query(sql, new Object[] {cri.getPageNum()-1, cri.getAmount()}, bookRowMapper());
+	}else if(cri.getKeyword() != null && cri.getType() != null) {
+		String sql ="select @rownum:=@rownum+1 as no, BOOKNUM, TITLE, AUTHOR, GRADE, STOCK, RENTAL, AUTHOR, GRADE,STOCK,RENTAL from book WHERE TITLE = ? LIMIT ?, ?";
+		return jdbcTemplate.query(sql, new Object[] {cri.getKeyword(), cri.getPageNum()-1, cri.getAmount()}, bookRowMapper());
+	}
+		return null;
+	}
 	@Override
 	public int borrow(Book book) {
 		String sql = "UPDATE book SET STOCK = ?, RENTAL =? WHERE BOOKNUM =?";
@@ -115,8 +143,8 @@ public class BookDao implements BookRepository{
 	}
 
 	@Override
-	public List<Book> Search(String title) {
-		List<Book> book = jdbcTemplate.query("select * from book where title= ?", bookRowMapper(), title);
+	public List<Book> search(String title) {
+		List<Book> book = jdbcTemplate.query("select * from book where title LIKE ?", bookRowMapper(), title);
 		return book;
 	}
 
